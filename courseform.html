@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment</title>
+    <style>
+        #success_msg_lok { color: green; font-weight: bold; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Course Enrollment Form</h2>
+    <form id="enrollmentForm_lok">
+        <div class="form-group_lok">
+            <label>Student Name</label>
+            <input type="text" id="studentName_lok" name="studentName_lok" required>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Email Address</label>
+            <input type="email" id="email_lok" name="email_lok" required>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Course Name</label>
+            <select id="course_lok" name="course_lok">
+                <option value="">-- Select Course --</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Data Science">Data Science</option>
+                <option value="Cyber Security">Cyber Security</option>
+            </select>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Mode of Study</label>
+            <input type="radio" name="mode_lok" value="Online"> Online
+            <input type="radio" name="mode_lok" value="Offline"> Offline
+        </div>
+
+        <div class="form-group_lok">
+            <label>Previous Experience?</label>
+            <input type="radio" name="exp_lok" value="Yes" onclick="toggleExp_lok(true)"> Yes
+            <input type="radio" name="exp_lok" value="No" onclick="toggleExp_lok(false)" checked> No
+        </div>
+
+        <div id="experienceBox_lok" class="form-group_lok">
+            <label>Experience Details</label>
+            <textarea id="expDetails_lok" name="expDetails_lok" rows="3" placeholder="Describe your experience..."></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn_lok">Enroll Now</button>
+        <p id="success_msg_lok">✅ Enrollment Successful! Refreshing in 5 seconds...</p>
+    </form>
+</div>
+
+<script>
+    function toggleExp_lok(show) {
+        const box = document.getElementById("experienceBox_lok");
+        box.style.display = show ? "block" : "none";
+    }
+
+    document.getElementById("enrollmentForm_lok").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById("studentName_lok").value.trim();
+        const email = document.getElementById("email_lok").value.trim();
+        const course = document.getElementById("course_lok").value;
+        const mode = document.querySelector('input[name="mode_lok"]:checked');
+        const expSelected = document.querySelector('input[name="exp_lok"]:checked').value;
+        const expDetails = document.getElementById("expDetails_lok").value.trim();
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (name === "") {
+            alert("Student Name is required.");
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        if (course === "") {
+            alert("Please select a course.");
+            return;
+        }
+
+        if (!mode) {
+            alert("Please select an enrollment mode (Online/Offline).");
+            return;
+        }
+
+        if (expSelected === "Yes" && expDetails === "") {
+            alert("Please provide your experience details.");
+            return;
+        }
+
+        document.getElementById("success_msg_lok").style.display = "block";
+        document.getElementById("submitBtn_lok").disabled = true;
+
+        setTimeout(() => {
+            location.reload();
+        }, 5000);
+    });
+</script>
+
+</body>
+</html>
+

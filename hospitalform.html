@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Appointment Booking Form</title>
+    <style>
+        .appointment-container { max-width: 450px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .form-group_lok { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; padding: 12px; border: none; width: 100%; cursor: pointer; font-size: 16px; }
+        button:disabled { background-color: #cccccc; }
+        #msg_lok { margin-top: 15px; padding: 10px; color: #155724; background-color: #d4edda; display: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="appointment-container">
+    <h2>Book Appointment</h2>
+    <form id="appointmentForm_lok">
+        <div class="form-group_lok">
+            <label>Patient Name</label>
+            <input type="text" id="patientName_lok" name="patientName_lok" placeholder="Letters only" required>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Age</label>
+            <input type="number" id="patientAge_lok" name="patientAge_lok" placeholder="Age > 0" required>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Phone Number</label>
+            <input type="text" id="phone_lok" name="phone_lok" placeholder="10 digits (98/97...)" required>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Department</label>
+            <select id="dept_lok" name="dept_lok">
+                <option value="">-- Select Department --</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="General Medicine">General Medicine</option>
+            </select>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Appointment Date</label>
+            <input type="date" id="date_lok" name="date_lok" required>
+        </div>
+
+        <div class="form-group_lok">
+            <label>Time Slot</label>
+            <select id="time_lok" name="time_lok">
+                <option value="">-- Select Time Slot --</option>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="01:00 PM">01:00 PM</option>
+                <option value="04:00 PM">04:00 PM</option>
+            </select>
+        </div>
+
+        <button type="submit" id="submitBtn_lok">Confirm Appointment</button>
+        <div id="msg_lok"></div>
+    </form>
+</div>
+
+<script>
+    document.getElementById("appointmentForm_lok").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        var name = document.getElementById("patientName_lok").value.trim();
+        var age = parseInt(document.getElementById("patientAge_lok").value);
+        var phone = document.getElementById("phone_lok").value.trim();
+        var dept = document.getElementById("dept_lok").value;
+        var dateVal = document.getElementById("date_lok").value;
+        var time = document.getElementById("time_lok").value;
+
+        var selectedDate = new Date(dateVal);
+        var today = new Date();
+        today.setHours(0,0,0,0); 
+
+        var nameRegex = /^[A-Za-z ]+$/;
+        var phoneRegex = /^(98|97)[0-9]{8}$/;
+
+        if (!nameRegex.test(name)) {
+            alert("Name must contain letters only.");
+            return;
+        }
+
+        if (isNaN(age) || age <= 0) {
+            alert("Please enter a valid age greater than 0.");
+            return;
+        }
+
+        if (!phoneRegex.test(phone)) {
+            alert("Phone must be 10 digits and start with 98 or 97.");
+            return;
+        }
+
+        if (dept === "") {
+            alert("Please select a medical department.");
+            return;
+        }
+
+        if (!dateVal || selectedDate < today) {
+            alert("Appointment date cannot be in the past.");
+            return;
+        }
+
+        if (time === "") {
+            alert("Please select a time slot.");
+            return;
+        }
+
+        alert("Success! Appointment confirmed for: " + name);
+
+        var successDiv = document.getElementById("msg_lok");
+        successDiv.style.display = "block";
+        successDiv.innerHTML = "✅ Appointment scheduled for " + name + " in " + dept + " at " + time + ". Refreshing...";
+        
+        document.getElementById("submitBtn_lok").disabled = true;
+
+        setTimeout(() => {
+            location.reload();
+        }, 5000);
+    });
+</script>
+
+</body>
+</html>
+

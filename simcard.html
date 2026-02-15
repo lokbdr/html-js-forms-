@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Registration</title>
+    <style>
+        #status_lok { font-weight: bold; margin-top: 15px; padding: 10px; border-radius: 5px; }
+        .success_lok { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .error_lok { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>SIM Card Registration Form</h2>
+        <form id="simForm_lok">
+            <div class="fields">
+                <label>Full Name:</label>
+                <input type="text" id="fullname_lok" name="fullname_lok" placeholder="Letters only" required>
+            </div>
+
+            <div class="fields">
+                <label>Citizenship Number:</label>
+                <input type="text" id="citizenship_lok" name="citizenship_lok" placeholder="Min 10 characters" required>
+            </div>
+
+            <div class="fields">
+                <label>SIM Type:</label>
+                <input type="radio" name="simtype_lok" value="Prepaid"> Prepaid
+                <input type="radio" name="simtype_lok" value="Postpaid"> Postpaid
+            </div>
+
+            <div class="fields">
+                <label>Date of Birth:</label>
+                <input type="date" id="dob_lok" name="dob_lok" required>
+            </div>
+
+            <div class="fields">
+                <label>Nationality:</label>
+                <select id="nationality_lok" name="nationality_lok">
+                    <option value="">-- Select Nationality --</option>
+                    <option value="Nepali">Nepali</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="fields">
+                <input type="checkbox" id="terms_lok" name="terms_lok">
+                <label>I agree to the Terms and Conditions</label>
+            </div>
+
+            <button type="submit" id="submitBtn_lok">Register SIM</button>
+            
+            <div id="status_lok"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("simForm_lok").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            var name = document.getElementById("fullname_lok").value.trim();
+            var citizen = document.getElementById("citizenship_lok").value.trim();
+            var simType = document.querySelector('input[name="simtype_lok"]:checked');
+            var dob = new Date(document.getElementById("dob_lok").value);
+            var nationality = document.getElementById("nationality_lok").value;
+            var terms = document.getElementById("terms_lok").checked;
+            var msgBox = document.getElementById("status_lok");
+
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) { age--; }
+
+            var nameRegex = /^[A-Za-z ]+$/;
+
+            if (!nameRegex.test(name)) {
+                alert("Name must contain only letters.");
+                return;
+            }
+
+            if (citizen.length < 10) {
+                alert("Citizenship Number must be at least 10 characters long.");
+                return;
+            }
+
+            if (!simType) {
+                alert("Please select a SIM Type (Prepaid or Postpaid).");
+                return;
+            }
+
+            if (age < 18) {
+                alert("You must be at least 18 years old to register a SIM card.");
+                return;
+            }
+
+            if (nationality === "") {
+                alert("Please select your nationality.");
+                return;
+            }
+
+            if (!terms) {
+                alert("You must accept the terms and conditions.");
+                return;
+            }
+
+            msgBox.className = "success_lok";
+            msgBox.innerHTML = "✅ Registration Successful! Your SIM request for " + name + " is processing.";
+            
+            document.getElementById("submitBtn_lok").disabled = true;
+
+            setTimeout(function () {
+                location.reload();
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
+

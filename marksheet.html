@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>makrsheet generator </title>
+</head>
+<body>
+    <div class="container">
+        <h2>Student Mark Sheet Generator</h2>
+        <form id="marksheetForm_lok">
+            <input type="text" id="studentName_lok" placeholder="Student Name" required>
+            <input type="text" id="rollNo_lok" placeholder="Roll Number" required>
+            
+            <div class="marks-input">
+                <input type="number" id="english_lok" placeholder="English Marks" min="0" max="100" required>
+                <input type="number" id="math_lok" placeholder="Math Marks" min="0" max="100" required>
+                <input type="number" id="science_lok" placeholder="Science Marks" min="0" max="100" required>
+            </div>
+    
+            <button type="submit">Generate Mark Sheet</button>
+        </form>
+    
+        <div id="resultDisplay_lok" style="display:none; border: 1px solid #ccc; padding: 20px; margin-top: 20px;">
+            </div>
+    </div>
+
+    <script>
+        document.getElementById('marksheetForm_lok').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('studentName_lok').value;
+    const roll = document.getElementById('rollNo_lok').value;
+    const eng = parseFloat(document.getElementById('english_lok').value);
+    const math = parseFloat(document.getElementById('math_lok').value);
+    const sci = parseFloat(document.getElementById('science_lok').value);
+
+    const total = eng + math + sci;
+    const percentage = (total / 300) * 100;
+
+    let status = (eng >= 40 && math >= 40 && sci >= 40) ? "PASS" : "FAIL";
+
+    let grade = "";
+    if (status === "FAIL") {
+        grade = "F";
+    } else if (percentage >= 80) {
+        grade = "A";
+    } else if (percentage >= 60) {
+        grade = "B";
+    } else {
+        grade = "C";
+    }
+
+    const resultDiv = document.getElementById('resultDisplay_lok');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+        <h3>Mark Sheet: ${name} (Roll: ${roll})</h3>
+        <p>Total Marks: <strong>${total} / 300</strong></p>
+        <p>Percentage: <strong>${percentage.toFixed(2)}%</strong></p>
+        <p>Result: <span style="color: ${status === 'PASS' ? 'green' : 'red'}">${status}</span></p>
+        <p>Grade: <strong>${grade}</strong></p>
+    `;
+});
+    </script>
+</body>
+</html>
